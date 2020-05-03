@@ -2,22 +2,23 @@ from flask import *
 import sys
 import os
 import ftputil
+from secrets import DOMAIN, USERNAME, PASSWORD
 
 app = Flask(__name__)
-ftp = ftputil.FTPHost("ftp.aamirharoon.com", "bilal@bilal.aamirharoon.com", "Fozia814")
+ftp = ftputil.FTPHost(DOMAIN, USERNAME, PASSWORD)
 
 @app.route("/", methods=['POST'])
 def index():
     response = json.dumps(request.json)
     print(response, file=sys.stderr)
-    # update_repo()
+    update_repo()
     ftp_to_server()
     return response
 
 def update_repo():
-    os.chdir("./CodingAdventures")
-    os.system("git pull")
-    os.system("yarn docs:build")
+    os.chdir("/home/pi/Projects/AutoFTP/CodingAdventures")
+    os.system("sudo git pull")
+    os.system("sudo yarn docs:build")
 
 def ftp_to_server():
 
